@@ -2,7 +2,11 @@
 import ncs
 from ncs.application import Service
 from ncs.dp import Action
-
+# from jinja2 import Template
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+import os
+# example: https://routebythescript.com/creating-network-configurations-with-jinja/
 
 # ---------------
 # ACTIONS EXAMPLE
@@ -12,10 +16,18 @@ class DoubleAction(Action):
     def cb_action(self, uinfo, name, kp, input, output, trans):
         self.log.info('action name: ', name)
         self.log.info('action input.number: ', input.number)
+        DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+        env = Environment(loader=FileSystemLoader(DIR_PATH + '/templates'))
+        template = env.get_template('wan.j2')
+        # rendered = template.render()
 
+        template_output = template.render(intf="Ethernet1/0",intdscr="WAN_byJinja",ip="10.1.1.1",
+                          mask="255.255.255.252", qospol="200MB_SHAPE",bgpasn="65456",
+                          bgpnip="10.1.1.2",remasn="65499")
+        # template_output = t.render()
         # Updating the output data structure will result in a response
         # being returned to the caller.
-        output.result = input.number * 2
+        output.result = template_output
 
 
 # ------------------------

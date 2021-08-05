@@ -8,12 +8,9 @@
       -->
       <name>{/device}</name>
       <config>
-        <!--
-            Add device-specific parameters here.
-            In this skeleton the, java code sets a variable DUMMY, use it
-            to set something on the device e.g.:
-            <ip-address-on-device>{$DUMMY}</ip-address-on-device>
-        -->
+      <banner xmlns="urn:ios">
+        <motd>Welcome to the Cisco NSO Testbed, please be respectful.</motd>
+      </banner>
       </config>
     </device>
   </devices>

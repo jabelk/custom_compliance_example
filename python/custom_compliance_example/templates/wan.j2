@@ -1,0 +1,9 @@
+interface {{ intf }}
+ description {{ intdscr }}
+ ip address {{ ip }} {{ mask }}
+ service-policy output {{ qospol }}
+
+router bgp {{ bgpasn|default("655123") }}
+ neighbor {{ bgpnip }} remote-as {{ remasn }}
+
+ip route 0.0.0.0 0.0.0.0 {{ bgpnip }}

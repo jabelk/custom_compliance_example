@@ -26,12 +26,12 @@ module custom_compliance_example {
       tailf:actionpoint custom_compliance_example-action;
       input {
         leaf number {
-          type uint8;
+          type string;
         }
       }
       output {
         leaf result {
-          type uint16;
+          type string;
         }
       }
     }

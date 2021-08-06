@@ -56,9 +56,21 @@ module custom_compliance_example {
       }
     }
 
-    // replace with your own stuff here
-    leaf dummy {
-      type inet:ipv4-address;
+        leaf-list report_categories {
+          type enumeration {
+            enum "wan";
+            enum "banner";
+            enum "snmp";
+            enum "interfaces";
+            enum "vty";
+          }
     }
+
+
+
+  //   // replace with your own stuff here
+  //   leaf report_type {
+  //     type inet:ipv4-address;
+  //   }
   }
 }

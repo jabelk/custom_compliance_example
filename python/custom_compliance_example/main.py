@@ -22,23 +22,32 @@ class DoubleAction(Action):
         root = ncs.maagic.get_root(trans)
         # netbox_server = root.netbox_server[service.netbox_server]
         trans.maapi.install_crypto_keys()
-        with ncs.maapi.single_write_trans('admin', 'python', groups=['ncsadmin']) as t:
-            root = ncs.maagic.get_root(t)
-            writeable_service = ncs.maagic.get_node(t, service._path)
-            template = ncs.template.Template(writeable_service)
-            vars = ncs.template.Variables()
-            #sanity check
-            device_cdb = root.devices.device["dist-rtr01"]
-            output.result = device_cdb.name
-            # end
-            # root.custom_compliance_example__custom_compliance_example.create("first")
-            output.result = type(root.custom_compliance_example__custom_compliance_example["first"].device  
+        with ncs.maapi.Maapi() as m:
+            with ncs.maapi.Session(m, 'admin', 'python'):
+                with m.start_write_trans() as t:
+                    # Create new service object from a writeable transaction
+                    writeable_service = ncs.maagic.get_node(t, service._path)
+                    template = ncs.template.Template(writeable_service)
 
-            # root.custom_compliance_example__custom_compliance_example["first"].report_categories = ["banner"]
-            # cp = ncs.maapi.CommitParams()
-            # cp.dry_run_native()
-            # r = t.apply_params(True, cp)
-            # t.apply()
+                    devices = []
+                    root = ncs.maagic.get_root(t)
+                    writeable_service = ncs.maagic.get_node(t, service._path)
+                    template = ncs.template.Template(writeable_service)
+                    vars = ncs.template.Variables()
+                    #sanity check
+                    device_cdb = root.devices.device["dist-rtr01"]
+                    device_cdb.name = "NOT-dist-rtr01"
+                    output.result = device_cdb.name
+                    # end
+                    # root.custom_compliance_example__custom_compliance_example.create("first")
+                    # output.result = type(root.custom_compliance_example__custom_compliance_example["first"].device  
+
+                    # root.custom_compliance_example__custom_compliance_example["first"].report_categories = ["banner"]
+                    cp = ncs.maapi.CommitParams()
+                    cp.dry_run_native()
+                    r = t.apply_params(True, cp)
+                    t.apply()
+
 
 # /custom_compliance_example[name='first']/device [ dist-rtr01 ]
 # /custom_compliance_example[name='first']/report_categories [ banner interfaces ]
@@ -142,6 +151,8 @@ class DoubleAction(Action):
         #                   mask="255.255.255.252", qospol="200MB_SHAPE",bgpasn="65456",
         #                   bgpnip="10.1.1.2",remasn="65499")
         # output.result = template_output
+
+
 
 def j2_template_wrapper(template_service_name, **kwargs):
     """
